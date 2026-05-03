@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Colors mapping */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-dim: var(--accent-gold-dim);
+  --color-accent-blue: var(--accent-blue);
+}
+
+@layer base {
+  :root {
+    /* Light Mode */
+    --bg-primary: #F8F6F1;
+    --bg-secondary: #EFEFEA;
+    --bg-tertiary: #E8E6E0;
+    --bg-glass: rgba(0,0,0,0.03);
+    --border: rgba(0,0,0,0.08);
+    --border-hover: rgba(0,0,0,0.16);
+
+    --text-primary: #1A1816;
+    --text-secondary: #6B6560;
+    --text-tertiary: #A8A4A0;
+
+    --accent-gold: #A67C3D;
+    --accent-gold-dim: rgba(166,124,61,0.15);
+    --accent-blue: #2E6DB4;
+
+    --gradient-hero: linear-gradient(135deg, #F8F6F1 60%, #EFEFEA 100%);
+    --glow-gold: 0 0 60px rgba(166,124,61,0.12);
+  }
+
+  .dark {
+    /* Dark Mode */
+    --bg-primary: #0A0A0B;
+    --bg-secondary: #111113;
+    --bg-tertiary: #1A1A1E;
+    --bg-glass: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.16);
+
+    --text-primary: #F0EDE8;
+    --text-secondary: #8A8780;
+    --text-tertiary: #4A4845;
+
+    --accent-gold: #C9A96E;
+    --accent-gold-dim: rgba(201,169,110,0.15);
+    --accent-blue: #4A90D9;
+
+    --gradient-hero: linear-gradient(135deg, #0A0A0B 60%, #141418 100%);
+    --glow-gold: 0 0 60px rgba(201,169,110,0.12);
+  }
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body {
+    /* cursor: none; */
+  }
+}
+
+/* Base custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Lenis recommended */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Utilities */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
