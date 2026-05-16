@@ -29,9 +29,9 @@ export function Projects() {
 
   const selectedProject = PROJECTS.find((p) => p.id === selectedId);
 
-  // FIX: Double the array for the loop.
-  // EffectCards requires more slides than visible to perform the loop transition smoothly.
-  const loopedProjects = [...PROJECTS, ...PROJECTS];
+  // FIX: Triple the array for the loop to satisfy EffectCards requirement.
+  // Swiper 11/12 with 'cards' effect needs many slides to loop correctly without warnings.
+  const loopedProjects = [...PROJECTS, ...PROJECTS, ...PROJECTS];
 
   return (
     <section
@@ -47,7 +47,6 @@ export function Projects() {
           loop={true}
           centeredSlides={true}
           loopAdditionalSlides={3}
-          loopAddBlankSlides={false}
           // Use the state-based refs for navigation
           navigation={{
             prevEl,
@@ -64,7 +63,7 @@ export function Projects() {
         >
           {loopedProjects.map((project, idx) => (
             <SwiperSlide
-              key={`${project.id}-${idx}`} // Unique key for doubled array
+              key={`${project.id}-${idx}`}
               className="rounded-2xl border border-border bg-bg-secondary overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
             >
               <div
@@ -221,7 +220,7 @@ export function Projects() {
                   <a
                     href={selectedProject.githubUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-text-primary text-bg-primary font-medium hover:bg-text-primary/90 transition-colors"
                   >
                     <Github className="w-4 h-4" /> Code
@@ -229,7 +228,7 @@ export function Projects() {
                   <a
                     href={selectedProject.liveUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-border hover:bg-bg-tertiary transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" /> Live Demo

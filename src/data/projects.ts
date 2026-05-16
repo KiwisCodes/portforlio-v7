@@ -14,24 +14,6 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    id: 1,
-    title: "Traffic Simulator",
-    subtitle: "Team Lead • Frankfurt 🇩🇪",
-    description:
-      "Led a 5-person team to build a high-performance traffic simulation engine with Java 17 and TraCI.",
-    details: [
-      "Led 5-person team yielding 30% faster delivery",
-      "Java 17 engine achieving 0.1s sync via TraCI",
-      "Implemented Producer-Consumer pattern to eliminate UI latency",
-    ],
-    tags: ["Java", "Spring MVC", "TraCI", "Docker"],
-    image: "/traffic-simulator.png",
-    color: "from-blue-900/20 to-transparent",
-    featured: true,
-    githubUrl: "https://github.com/KiwisCodes/Java_OOP_Traffic_Simulator",
-    liveUrl: "https://github.com/KiwisCodes/Java_OOP_Traffic_Simulator",
-  },
-  {
     id: 2,
     title: "Kimono Rental System",
     subtitle: "Serverless Booking Platform",
@@ -49,7 +31,7 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://kimono-demo.vercel.app/",
   },
   {
-    id: 3,
+    id: 1,
     title: "Tripify Webapp",
     subtitle: "AI Travel Engine",
     description:
@@ -64,6 +46,24 @@ export const PROJECTS: Project[] = [
     color: "from-cyan-900/20 to-transparent",
     githubUrl: "https://github.com/KiwisCodes/Tripify-Webapp",
     liveUrl: "https://trippy-landing-page.vercel.app/",
+  },
+  {
+    id: 3,
+    title: "Traffic Simulator",
+    subtitle: "Team Lead • Frankfurt 🇩🇪",
+    description:
+      "Led a 5-person team to build a high-performance traffic simulation engine with Java 17 and TraCI.",
+    details: [
+      "Led 5-person team yielding 30% faster delivery",
+      "Java 17 engine achieving 0.1s sync via TraCI",
+      "Implemented Producer-Consumer pattern to eliminate UI latency",
+    ],
+    tags: ["Java", "Spring MVC", "TraCI", "Docker"],
+    image: "/traffic-simulator.png",
+    color: "from-blue-900/20 to-transparent",
+    featured: true,
+    githubUrl: "https://github.com/KiwisCodes/Java_OOP_Traffic_Simulator",
+    liveUrl: "https://github.com/KiwisCodes/Java_OOP_Traffic_Simulator",
   },
   // {
   //   id: 4,

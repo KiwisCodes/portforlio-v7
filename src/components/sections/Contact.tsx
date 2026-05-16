@@ -2,41 +2,61 @@ import { useState } from "react";
 import { SectionTitle } from "../ui/SectionTitle";
 import { FadeUp } from "../animations/FadeUp";
 import { MagneticButton } from "../animations/MagneticButton";
-import { Mail, Linkedin, Github, ExternalLink, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import {
+  Mail,
+  Linkedin,
+  Github,
+  ExternalLink,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
 export function Contact() {
   const GITHUB_URL = "https://github.com/KiwisCodes";
-  const LINKEDIN_URL = "https://www.linkedin.com/in/th%C3%A0nh-h%C6%B0ng-phan-05397b327/";
-  
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const LINKEDIN_URL =
+    "https://www.linkedin.com/in/th%C3%A0nh-h%C6%B0ng-phan-05397b327/";
+
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error" | "missing_key"
+  >("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('sending');
+    const form = e.currentTarget; // Capture the form reference
 
-    const formData = new FormData(e.currentTarget);
-    
-    // IMPORTANT: Replace 'YOUR_ACCESS_KEY_HERE' with your real key from web3forms.com
-    formData.append("access_key", "YOUR_ACCESS_KEY_HERE");
+    // Use environment variable for security
+    const ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    if (!ACCESS_KEY) {
+      console.error("Web3Forms Error: Access Key is missing in .env file.");
+      setStatus("missing_key");
+      return;
+    }
+
+    setStatus("sending");
+    const formData = new FormData(form);
+    formData.append("access_key", ACCESS_KEY);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setStatus('success');
-        e.currentTarget.reset();
-        setTimeout(() => setStatus('idle'), 5000); // Reset to idle after 5s
+        setStatus("success");
+        form.reset(); // Use captured reference
+        setTimeout(() => setStatus("idle"), 5000);
       } else {
-        setStatus('error');
+        console.error("Web3Forms Error:", data);
+        setStatus("error");
       }
     } catch (err) {
-      console.error("Form error:", err);
-      setStatus('error');
+      console.error("Network Error:", err);
+      setStatus("error");
     }
   };
 
@@ -157,32 +177,40 @@ export function Contact() {
 
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex-1">
-                  {status === 'success' && (
+                  {status === "success" && (
                     <div className="flex items-center gap-2 text-green-500 font-medium animate-in fade-in slide-in-from-left-4">
                       <CheckCircle2 className="w-5 h-5" />
                       <span>Message sent successfully!</span>
                     </div>
                   )}
-                  {status === 'error' && (
+                  {status === "error" && (
                     <div className="flex items-center gap-2 text-red-500 font-medium animate-in fade-in slide-in-from-left-4">
                       <AlertCircle className="w-5 h-5" />
                       <span>Something went wrong. Try again.</span>
                     </div>
                   )}
+                  {status === "missing_key" && (
+                    <div className="flex items-center gap-2 text-amber-500 font-medium animate-in fade-in slide-in-from-left-4 text-xs">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                      <span>Dev Note: Please restart server and check .env</span>
+                    </div>
+                  )}
                 </div>
-                
+
                 <MagneticButton
                   type="submit"
-                  disabled={status === 'sending'}
+                  disabled={status === "sending"}
                   className="bg-text-primary text-bg-primary hover:bg-accent-gold disabled:opacity-50 disabled:cursor-not-allowed min-w-[160px]"
                   strength={30}
                 >
-                  {status === 'sending' ? (
+                  {status === "sending" ? (
                     <span className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" /> Sending...
                     </span>
                   ) : (
-                    <>Send Message <span className="ml-2">↗</span></>
+                    <>
+                      Send Message <span className="ml-2">↗</span>
+                    </>
                   )}
                 </MagneticButton>
               </div>
