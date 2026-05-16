@@ -59,18 +59,26 @@ export function Hero({ onOpenResume }: HeroProps) {
           </FadeUp>
 
           <FadeUp delay={2.6} className="flex flex-wrap items-center gap-6 mb-16">
-            <MagneticButton className="bg-text-primary text-bg-primary hover:bg-accent-gold" strength={30}>
-              <a href="#projects" className="flex items-center gap-2 font-medium text-inherit">
+            <MagneticButton 
+              className="bg-text-primary text-bg-primary hover:bg-accent-gold" 
+              strength={30}
+              onClick={() => {
+                const el = document.getElementById('projects');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <div className="flex items-center gap-2 font-medium text-inherit">
                 View My Work <ArrowDown className="w-4 h-4" />
-              </a>
+              </div>
             </MagneticButton>
-            <MagneticButton className="border border-border hover:bg-bg-tertiary" strength={20}>
-              <button 
-                onClick={onOpenResume}
-                className="flex items-center gap-2 font-medium text-inherit cursor-pointer"
-              >
+            <MagneticButton 
+              className="border border-border hover:bg-bg-tertiary" 
+              strength={20}
+              onClick={onOpenResume}
+            >
+              <div className="flex items-center gap-2 font-medium text-inherit">
                 Resume <FileText className="w-4 h-4" />
-              </button>
+              </div>
             </MagneticButton>
           </FadeUp>
 

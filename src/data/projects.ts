@@ -25,8 +25,7 @@ export const PROJECTS: Project[] = [
       "Implemented Producer-Consumer pattern to eliminate UI latency",
     ],
     tags: ["Java", "Spring MVC", "TraCI", "Docker"],
-    image:
-      "https://images.unsplash.com/photo-1510001099195-2eb4cb8bdac6?q=80&w=800&auto=format&fit=crop",
+    image: "/traffic-simulator.png",
     color: "from-blue-900/20 to-transparent",
     featured: true,
     githubUrl: "https://github.com/KiwisCodes/Java_OOP_Traffic_Simulator",
@@ -44,8 +43,7 @@ export const PROJECTS: Project[] = [
       "Custom React frontend with Framer Motion animations",
     ],
     tags: ["React", "Google Apps Script", "Tailwind", "Framer"],
-    image:
-      "https://images.unsplash.com/photo-1492666673288-3c4b4576ad9a?q=80&w=800&auto=format&fit=crop",
+    image: "/kimono-website.png",
     color: "from-accent-gold/20 to-transparent",
     githubUrl: "https://github.com/quytrang601/kimono-web",
     liveUrl: "https://kimono-demo.vercel.app/",
@@ -62,8 +60,7 @@ export const PROJECTS: Project[] = [
       "Interactive Mapbox integration",
     ],
     tags: ["Next.js", "TypeScript", "Gemini API", "Mapbox"],
-    image:
-      "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800&auto=format&fit=crop",
+    image: "/tripify-website.png",
     color: "from-cyan-900/20 to-transparent",
     githubUrl: "https://github.com/KiwisCodes/Tripify-Webapp",
     liveUrl: "https://trippy-landing-page.vercel.app/",

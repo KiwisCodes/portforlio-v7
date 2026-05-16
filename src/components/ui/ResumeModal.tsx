@@ -24,7 +24,10 @@ export function ResumeModal({ isOpen, onClose, resumeUrl }: ResumeModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8">
+        <div 
+          className="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-8"
+          data-lenis-prevent
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}

@@ -46,6 +46,8 @@ export function Projects() {
           grabCursor={true}
           loop={true}
           centeredSlides={true}
+          loopAdditionalSlides={3}
+          loopAddBlankSlides={false}
           // Use the state-based refs for navigation
           navigation={{
             prevEl,
