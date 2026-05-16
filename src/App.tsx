@@ -9,10 +9,12 @@ import { Education } from './components/sections/Education';
 import { Contact } from './components/sections/Contact';
 import { NoiseOverlay } from './components/ui/NoiseOverlay';
 import { ScrollProgress } from './components/ui/ScrollProgress';
+import { ResumeModal } from './components/ui/ResumeModal';
 import { useEffect, useState } from 'react';
 
 export default function App() {
   const [mounted, setMounted] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -25,13 +27,19 @@ export default function App() {
       {/* Removed custom cursor for native browser speed */}
       <NoiseOverlay />
       <ScrollProgress />
+
+      <ResumeModal 
+        isOpen={isResumeOpen} 
+        onClose={() => setIsResumeOpen(false)} 
+        resumeUrl="/resume.pdf" 
+      />
       
       <PageTransition>
         <div className="relative z-10 bg-bg-primary transition-colors duration-300 pointer-events-auto">
           <Navbar />
           
           <main>
-            <Hero />
+            <Hero onOpenResume={() => setIsResumeOpen(true)} />
             <About />
             <Projects />
             <Skills />

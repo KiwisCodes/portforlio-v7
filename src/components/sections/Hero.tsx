@@ -6,7 +6,11 @@ import { FadeUp } from '../animations/FadeUp';
 import { MagneticButton } from '../animations/MagneticButton';
 import { ArrowDown, FileText } from 'lucide-react';
 
-export function Hero() {
+interface HeroProps {
+  onOpenResume: () => void;
+}
+
+export function Hero({ onOpenResume }: HeroProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
@@ -56,14 +60,17 @@ export function Hero() {
 
           <FadeUp delay={2.6} className="flex flex-wrap items-center gap-6 mb-16">
             <MagneticButton className="bg-text-primary text-bg-primary hover:bg-accent-gold" strength={30}>
-              <a href="#projects" className="flex items-center gap-2 font-medium">
+              <a href="#projects" className="flex items-center gap-2 font-medium text-inherit">
                 View My Work <ArrowDown className="w-4 h-4" />
               </a>
             </MagneticButton>
             <MagneticButton className="border border-border hover:bg-bg-tertiary" strength={20}>
-              <a href="#" className="flex items-center gap-2 font-medium">
+              <button 
+                onClick={onOpenResume}
+                className="flex items-center gap-2 font-medium text-inherit cursor-pointer"
+              >
                 Resume <FileText className="w-4 h-4" />
-              </a>
+              </button>
             </MagneticButton>
           </FadeUp>
 
