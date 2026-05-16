@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { SectionTitle } from "../ui/SectionTitle";
-import { FadeUp } from "../animations/FadeUp";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -12,6 +11,8 @@ import {
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards, Navigation } from "swiper/modules";
+
+// Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-cards";
 import "swiper/css/navigation";
@@ -21,7 +22,16 @@ import { PROJECTS } from "../../data/projects";
 export function Projects() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
+  // Create state to store the navigation button elements
+  // This ensures Swiper re-renders once the buttons are available in the DOM
+  const [prevEl, setPrevEl] = useState<HTMLElement | null>(null);
+  const [nextEl, setNextEl] = useState<HTMLElement | null>(null);
+
   const selectedProject = PROJECTS.find((p) => p.id === selectedId);
+
+  // FIX: Double the array for the loop.
+  // EffectCards requires more slides than visible to perform the loop transition smoothly.
+  const loopedProjects = [...PROJECTS, ...PROJECTS];
 
   return (
     <section
@@ -35,6 +45,12 @@ export function Projects() {
           effect={"cards"}
           grabCursor={true}
           loop={true}
+          centeredSlides={true}
+          // Use the state-based refs for navigation
+          navigation={{
+            prevEl,
+            nextEl,
+          }}
           cardsEffect={{
             perSlideOffset: 12,
             perSlideRotate: 3,
@@ -42,15 +58,11 @@ export function Projects() {
             slideShadows: true,
           }}
           modules={[EffectCards, Navigation]}
-          navigation={{
-            nextEl: ".swiper-button-next-custom",
-            prevEl: ".swiper-button-prev-custom",
-          }}
           className="w-full h-[550px]"
         >
-          {PROJECTS.map((project, idx) => (
+          {loopedProjects.map((project, idx) => (
             <SwiperSlide
-              key={project.id}
+              key={`${project.id}-${idx}`} // Unique key for doubled array
               className="rounded-2xl border border-border bg-bg-secondary overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
             >
               <div
@@ -65,7 +77,7 @@ export function Projects() {
 
               <div className={`relative z-10 flex flex-col h-full`}>
                 <div
-                  className="p-8 flex-1 flex flex-col items-start translate-z-10"
+                  className="p-8 flex-1 flex flex-col items-start"
                   style={{ transform: "translateZ(30px)" }}
                 >
                   {project.featured && (
@@ -120,13 +132,19 @@ export function Projects() {
           ))}
         </Swiper>
 
-        {/* Custom Navigation Buttons */}
-        <div className="swiper-button-prev-custom absolute left-[-20px] md:left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg-tertiary border border-border flex items-center justify-center cursor-pointer z-10 opacity-0 group-hover/swiper:opacity-100 transition-opacity hover:bg-border/50 hover:text-accent-gold shadow-lg backdrop-blur-sm">
+        {/* Custom Navigation Buttons using React refs */}
+        <button
+          ref={(node) => setPrevEl(node)}
+          className="absolute left-[-20px] md:left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg-tertiary border border-border flex items-center justify-center cursor-pointer z-10 opacity-0 group-hover/swiper:opacity-100 transition-opacity hover:bg-border/50 hover:text-accent-gold shadow-lg backdrop-blur-sm"
+        >
           <ChevronLeft className="w-5 h-5" />
-        </div>
-        <div className="swiper-button-next-custom absolute right-[-20px] md:right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg-tertiary border border-border flex items-center justify-center cursor-pointer z-10 opacity-0 group-hover/swiper:opacity-100 transition-opacity hover:bg-border/50 hover:text-accent-gold shadow-lg backdrop-blur-sm">
+        </button>
+        <button
+          ref={(node) => setNextEl(node)}
+          className="absolute right-[-20px] md:right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg-tertiary border border-border flex items-center justify-center cursor-pointer z-10 opacity-0 group-hover/swiper:opacity-100 transition-opacity hover:bg-border/50 hover:text-accent-gold shadow-lg backdrop-blur-sm"
+        >
           <ChevronRight className="w-5 h-5" />
-        </div>
+        </button>
       </div>
 
       <AnimatePresence>
@@ -200,12 +218,16 @@ export function Projects() {
                 <div className="mt-auto flex gap-4 w-full">
                   <a
                     href={selectedProject.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
                     className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-text-primary text-bg-primary font-medium hover:bg-text-primary/90 transition-colors"
                   >
                     <Github className="w-4 h-4" /> Code
                   </a>
                   <a
                     href={selectedProject.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
                     className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-border hover:bg-bg-tertiary transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" /> Live Demo
