@@ -10,17 +10,10 @@ import { Contact } from './components/sections/Contact';
 import { NoiseOverlay } from './components/ui/NoiseOverlay';
 import { ScrollProgress } from './components/ui/ScrollProgress';
 import { ResumeModal } from './components/ui/ResumeModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function App() {
-  const [mounted, setMounted] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
 
   return (
     <>

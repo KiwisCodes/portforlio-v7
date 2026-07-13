@@ -11,6 +11,7 @@ export function Footer() {
           <a href="#about" className="hover:text-accent-gold transition-colors">About</a>
           <a href="#projects" className="hover:text-accent-gold transition-colors">Projects</a>
           <a href="#skills" className="hover:text-accent-gold transition-colors">Skills</a>
+          <a href="#education" className="hover:text-accent-gold transition-colors">Education</a>
           <a href="#contact" className="hover:text-accent-gold transition-colors">Contact</a>
         </div>
         

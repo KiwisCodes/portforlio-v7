@@ -5,10 +5,10 @@ export function TextReveal({ text, className, delay = 0 }: { text: string; class
 
   const container: Variants = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: {
       opacity: 1,
       transition: { staggerChildren: 0.05, delayChildren: delay * 0.1 },
-    }),
+    },
   };
 
   const child: Variants = {
