@@ -9,6 +9,7 @@ export function Footer() {
         
         <div className="flex gap-8 text-sm">
           <a href="#about" className="hover:text-accent-gold transition-colors">About</a>
+          <a href="#experience" className="hover:text-accent-gold transition-colors">Experience</a>
           <a href="#projects" className="hover:text-accent-gold transition-colors">Projects</a>
           <a href="#skills" className="hover:text-accent-gold transition-colors">Skills</a>
           <a href="#education" className="hover:text-accent-gold transition-colors">Education</a>

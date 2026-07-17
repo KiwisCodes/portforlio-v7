@@ -21,8 +21,22 @@ export default defineConfig(({mode}) => {
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      // Do not modifyâ€”file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // React core — always needed, cache-stable
+            'vendor-react': ['react', 'react-dom'],
+            // Heavy animation libs — load in parallel, cached separately
+            'vendor-motion': ['framer-motion'],
+            'vendor-gsap':   ['gsap', 'gsap/ScrollTrigger'],
+            'vendor-lenis':  ['lenis'],
+          },
+        },
+      },
     },
   };
 });

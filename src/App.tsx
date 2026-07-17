@@ -2,15 +2,21 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { PageTransition } from './components/layout/PageTransition';
 import { Hero } from './components/sections/Hero';
-import { About } from './components/sections/About';
-import { Projects } from './components/sections/Projects';
-import { Skills } from './components/sections/Skills';
-import { Education } from './components/sections/Education';
-import { Contact } from './components/sections/Contact';
 import { NoiseOverlay } from './components/ui/NoiseOverlay';
 import { ScrollProgress } from './components/ui/ScrollProgress';
 import { ResumeModal } from './components/ui/ResumeModal';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
+
+// Lazy load below-the-fold sections — only Hero loads on first paint
+const About     = lazy(() => import('./components/sections/About').then(m => ({ default: m.About })));
+const Experience = lazy(() => import('./components/sections/Experience').then(m => ({ default: m.Experience })));
+const Projects  = lazy(() => import('./components/sections/Projects').then(m => ({ default: m.Projects })));
+const Skills    = lazy(() => import('./components/sections/Skills').then(m => ({ default: m.Skills })));
+const Education = lazy(() => import('./components/sections/Education').then(m => ({ default: m.Education })));
+const Contact   = lazy(() => import('./components/sections/Contact').then(m => ({ default: m.Contact })));
+
+// Thin skeleton so layout doesn't jump while section JS loads
+const SectionSkeleton = () => <div className="py-32" />;
 
 export default function App() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
@@ -33,11 +39,24 @@ export default function App() {
           
           <main>
             <Hero onOpenResume={() => setIsResumeOpen(true)} />
-            <About />
-            <Projects />
-            <Skills />
-            <Education />
-            <Contact />
+            <Suspense fallback={<SectionSkeleton />}>
+              <About />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Experience />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Projects />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Skills />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Education />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Contact />
+            </Suspense>
           </main>
           
           <Footer />

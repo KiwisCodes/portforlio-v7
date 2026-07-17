@@ -1,21 +1,48 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { motion } from 'framer-motion';
 import { SplitChars } from '../animations/SplitChars';
 import { FadeUp } from '../animations/FadeUp';
 import { MagneticButton } from '../animations/MagneticButton';
 import { ArrowDown, FileText } from 'lucide-react';
+import { DecorativeSquiggle, SQUIGGLE_PATHS } from '../ui/DecorativeSquiggle';
 
 interface HeroProps {
   onOpenResume: () => void;
 }
 
 export function Hero({ onOpenResume }: HeroProps) {
-  const imgRef = useRef<HTMLImageElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  
+  // Track mouse coordinates for the 3D parallax tilt effect on the profile card
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // Coordinates relative to the center of the card
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    
+    // Scale max rotation to 12 degrees
+    const tiltX = -(mouseY / (height / 2)) * 12;
+    const tiltY = (mouseX / (width / 2)) * 12;
+    
+    setTilt({ x: tiltX, y: tiltY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
 
   useGSAP(() => {
-    // Scroll indicator bounce
+    // Scroll indicator bounce animation
     if (scrollIndicatorRef.current) {
       gsap.to(scrollIndicatorRef.current, {
         y: 10,
@@ -29,8 +56,56 @@ export function Hero({ onOpenResume }: HeroProps) {
 
   return (
     <section id="hero" className="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden">
-      {/* Background Gradient */}
+      {/* Background Radial Gradient */}
       <div className="absolute inset-0 bg-[var(--gradient-hero)] opacity-50 pointer-events-none" />
+
+      {/* Morphing Mesh Gradient Shapes (AI can't do custom interactive math here) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div 
+          animate={{
+            x: [0, 40, -30, 0],
+            y: [0, -40, 20, 0],
+            scale: [1, 1.1, 0.95, 1],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{
+            position: 'absolute',
+            top: '-15%',
+            left: '-10%',
+            width: '55%',
+            aspectRatio: '1',
+            borderRadius: '50%',
+            backgroundImage: 'radial-gradient(circle, rgba(166,124,61,0.14) 0%, transparent 70%)',
+            filter: 'blur(40px)',
+          }}
+        />
+        <motion.div 
+          animate={{
+            x: [0, -30, 40, 0],
+            y: [0, 30, -40, 0],
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{
+            duration: 22,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{
+            position: 'absolute',
+            bottom: '-15%',
+            right: '-10%',
+            width: '55%',
+            aspectRatio: '1',
+            borderRadius: '50%',
+            backgroundImage: 'radial-gradient(circle, rgba(46,109,180,0.08) 0%, transparent 70%)',
+            filter: 'blur(40px)',
+          }}
+        />
+      </div>
 
       <div className="max-w-7xl mx-auto w-full px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
         
@@ -84,7 +159,7 @@ export function Hero({ onOpenResume }: HeroProps) {
 
           {/* Badges */}
           <FadeUp delay={2.8} className="flex flex-wrap gap-3">
-            {['Java', 'React', 'Spring Boot', 'Python', 'TypeScript'].map(tech => (
+            {['Java', 'Spring Boot', 'C#', '.NET', 'Next.js', 'TypeScript', 'JavaScript', 'C++', 'Python', 'FastAPI'].map(tech => (
               <span key={tech} className="px-4 py-1.5 rounded-full border border-border text-xs font-mono tracking-wide text-text-secondary">
                 {tech}
               </span>
@@ -92,21 +167,67 @@ export function Hero({ onOpenResume }: HeroProps) {
           </FadeUp>
         </div>
 
-        {/* Right Column: Image */}
-        <div className="lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2">
-          <FadeUp delay={1.5} className="relative w-full max-w-[320px] lg:max-w-[400px] aspect-square overflow-hidden rounded-full border border-border/20 group">
-            <img 
-              ref={imgRef}
-              src="/pth-office-upscaled.jpg" 
-              alt="Thanh Hung Phan" 
-              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105 z-10"
-              data-cursor="view"
-              onError={(e) => {
-                // Fallback while the user uploads their image
-                e.currentTarget.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop";
-                e.currentTarget.onerror = null;
-              }}
-            />
+        {/* Right Column: Interactive 3D Parallax Image Card */}
+        <div className="lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2 relative">
+          {/* Decorative Squiggle behind/around profile photo */}
+          <DecorativeSquiggle
+            path={SQUIGGLE_PATHS.star}
+            width={160}
+            height={160}
+            className="absolute -top-12 -left-12 opacity-30 animate-pulse hidden sm:block"
+            duration={3}
+            delay={1.5}
+            scrollLinked={false}
+          />
+          <DecorativeSquiggle
+            path={SQUIGGLE_PATHS.hatch}
+            width={120}
+            height={120}
+            className="absolute -bottom-8 -right-8 opacity-40 hidden sm:block"
+            duration={2.5}
+            delay={2.0}
+            scrollLinked={false}
+          />
+          <FadeUp delay={1.5} className="w-full max-w-[320px] lg:max-w-[400px]">
+            <div 
+              style={{ perspective: "1000px" }}
+              className="w-full aspect-square"
+            >
+              <motion.div
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={handleMouseLeave}
+                animate={{
+                  rotateX: tilt.x,
+                  rotateY: tilt.y,
+                  scale: isHovered ? 1.03 : 1
+                }}
+                transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                className="relative w-full h-full rounded-full border border-border/20 overflow-hidden shadow-2xl bg-bg-secondary/40 backdrop-blur-sm cursor-pointer"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <motion.img 
+                  src="/pth-office-upscaled.jpg" 
+                  alt="Thanh Hung Phan" 
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  style={{ 
+                    transform: "translateZ(20px)",
+                    scale: 1.05
+                  }}
+                  onError={(e) => {
+                    // Fallback while the user uploads their image
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop";
+                    e.currentTarget.onerror = null;
+                  }}
+                />
+                
+                {/* Thin overlay shimmer */}
+                <div 
+                  className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent transition-opacity duration-300"
+                  style={{ opacity: isHovered ? 1 : 0 }}
+                />
+              </motion.div>
+            </div>
           </FadeUp>
         </div>
       </div>

@@ -21,24 +21,24 @@
 
 @layer base {
   :root {
-    /* Light Mode */
-    --bg-primary: #F8F6F1;
-    --bg-secondary: #EFEFEA;
-    --bg-tertiary: #E8E6E0;
-    --bg-glass: rgba(0,0,0,0.03);
-    --border: rgba(0,0,0,0.08);
-    --border-hover: rgba(0,0,0,0.16);
+    /* Light Mode (Optimized warm golden glow) */
+    --bg-primary: #FAF9F5;
+    --bg-secondary: #F3F1EC;
+    --bg-tertiary: #EAE7E0;
+    --bg-glass: rgba(166,124,61,0.02);
+    --border: rgba(166,124,61,0.1);
+    --border-hover: rgba(166,124,61,0.22);
 
-    --text-primary: #1A1816;
-    --text-secondary: #6B6560;
-    --text-tertiary: #A8A4A0;
+    --text-primary: #1F1D1A;
+    --text-secondary: #706A62;
+    --text-tertiary: #A6A098;
 
-    --accent-gold: #A67C3D;
-    --accent-gold-dim: rgba(166,124,61,0.15);
+    --accent-gold: #9B4F0A;
+    --accent-gold-dim: rgba(155, 79, 10, 0.1);
     --accent-blue: #2E6DB4;
 
-    --gradient-hero: linear-gradient(135deg, #F8F6F1 60%, #EFEFEA 100%);
-    --glow-gold: 0 0 60px rgba(166,124,61,0.12);
+    --gradient-hero: linear-gradient(135deg, #FAF9F5 60%, #F3F1EC 100%);
+    --glow-gold: 0 0 50px rgba(155, 79, 10, 0.15);
   }
 
   .dark {
