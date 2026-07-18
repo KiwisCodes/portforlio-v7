@@ -3,11 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thanh Hung Phan - Portfolio</title>
+    <title>Thanh Hung Phan — Software Engineer & CS Student</title>
+    <meta name="description" content="Portfolio of Thanh Hung Phan — CS & Engineering student at Vietnamese-German University. Building scalable backends and polished frontends." />
+
+    <!-- Prevent theme flash before React hydrates -->
+    <script>
+      (function() {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
+        document.documentElement.classList.add(theme);
+      })();
+    </script>
+
+    <!-- Google Fonts: preconnect for faster DNS + TLS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

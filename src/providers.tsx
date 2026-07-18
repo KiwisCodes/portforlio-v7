@@ -39,15 +39,14 @@ export function Providers({ children }: { children: ReactNode }) {
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
+    // Store the fn reference so cleanup can deregister the SAME function
+    const tickerFn = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tickerFn);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(tickerFn);
     };
   }, []);
 
@@ -57,12 +56,20 @@ export function Providers({ children }: { children: ReactNode }) {
     root.classList.add(theme);
   }, [theme]);
 
+  const triggerTransition = () => {
+    const html = document.documentElement;
+    html.classList.add('theme-transitioning');
+    setTimeout(() => html.classList.remove('theme-transitioning'), 400);
+  };
+
   const setTheme = (newTheme: Theme) => {
+    triggerTransition();
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
   };
 
   const toggleTheme = () => {
+    triggerTransition();
     setThemeState(prev => {
       const next = prev === 'dark' ? 'light' : 'dark';
       localStorage.setItem('theme', next);

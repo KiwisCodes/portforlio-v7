@@ -103,6 +103,8 @@ export function About() {
               src="https://images.unsplash.com/photo-1642096633192-9290503a9a38?q=80&w=2070&auto=format&fit=crop"
               alt="Frankfurt City"
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </motion.div>
           
@@ -115,6 +117,8 @@ export function About() {
               src="https://www.frankfurt-university.de/fileadmin/standard/Aktuelles/Pressemitteilungen/Gebaeude_9_Frankfurt_UAS_Quelle_Friederike_Mannig_Frankfurt_UAS_-1.jpg"
               alt="University Building"
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </motion.div>
           
@@ -127,6 +131,8 @@ export function About() {
               src="https://www.twog-architecture.com/Data/Sites/1/Product/51/vgu-1.jpg"
               alt="VGU Campus"
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </motion.div>
         </div>

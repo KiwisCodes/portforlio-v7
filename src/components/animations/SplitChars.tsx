@@ -1,6 +1,13 @@
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useReducedMotion } from 'framer-motion';
 
 export function SplitChars({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) {
+  const reduce = useReducedMotion();
+
+  // Honor prefers-reduced-motion — render static text immediately
+  if (reduce) {
+    return <span className={className}>{text}</span>;
+  }
+
   const chars = text.split("");
 
   const container: Variants = {

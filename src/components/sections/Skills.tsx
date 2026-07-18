@@ -122,9 +122,12 @@ export function Skills() {
                     whileInView={{ width: `${prof.level}%` }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.5, ease: 'circOut', delay: idx * 0.1 }}
-                    className="h-full bg-accent-gold rounded-full relative"
+                    className="h-full bg-accent-gold rounded-full relative overflow-hidden"
                   >
-                    <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]" />
+                    <div
+                      className="absolute inset-0 bg-white/25"
+                      style={{ animation: 'shimmer 2.2s infinite', transform: 'translateX(-100%)' }}
+                    />
                   </motion.div>
                 </div>
               </div>

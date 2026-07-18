@@ -1,12 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { motion } from 'framer-motion';
 import { SplitChars } from '../animations/SplitChars';
 import { FadeUp } from '../animations/FadeUp';
 import { MagneticButton } from '../animations/MagneticButton';
 import { ArrowDown, FileText } from 'lucide-react';
-import { DecorativeSquiggle, SQUIGGLE_PATHS } from '../ui/DecorativeSquiggle';
 
 interface HeroProps {
   onOpenResume: () => void;
@@ -14,32 +12,6 @@ interface HeroProps {
 
 export function Hero({ onOpenResume }: HeroProps) {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
-  
-  // Track mouse coordinates for the 3D parallax tilt effect on the profile card
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    
-    // Coordinates relative to the center of the card
-    const mouseX = e.clientX - rect.left - width / 2;
-    const mouseY = e.clientY - rect.top - height / 2;
-    
-    // Scale max rotation to 12 degrees
-    const tiltX = -(mouseY / (height / 2)) * 12;
-    const tiltY = (mouseX / (width / 2)) * 12;
-    
-    setTilt({ x: tiltX, y: tiltY });
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
-  };
 
   useGSAP(() => {
     // Scroll indicator bounce animation
@@ -55,69 +27,103 @@ export function Hero({ onOpenResume }: HeroProps) {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden">
-      {/* Background Radial Gradient */}
-      <div className="absolute inset-0 bg-[var(--gradient-hero)] opacity-50 pointer-events-none" />
+    <section
+      id="hero"
+      className="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden"
+    >
+      {/* ── Hero Background ─────────────────────────────────────────────────── */}
+      {/* Full-bleed portrait: left side blurred+darkened/whitened, right clear */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
 
-      {/* Morphing Mesh Gradient Shapes (AI can't do custom interactive math here) */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          animate={{
-            x: [0, 40, -30, 0],
-            y: [0, -40, 20, 0],
-            scale: [1, 1.1, 0.95, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+        {/* Base image — zoomed out slightly, no filters applied directly */}
+        <img
+          src="/hungfinal1.png"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-[72%_center] scale-[0.92] origin-center"
+        />
+
+        {/*
+          LEFT PANEL: blur + slight darken/lighten blending.
+          backdrop-filter blurs whatever is beneath it (the image).
+          Mask = hard left, soft feather rightward ~58%.
+        */}
+        <div
+          className="absolute inset-0"
           style={{
-            position: 'absolute',
-            top: '-15%',
-            left: '-10%',
-            width: '55%',
-            aspectRatio: '1',
-            borderRadius: '50%',
-            backgroundImage: 'radial-gradient(circle, rgba(166,124,61,0.14) 0%, transparent 70%)',
-            filter: 'blur(40px)',
+            backdropFilter: "blur(5px) brightness(0.88)",
+            WebkitBackdropFilter: "blur(5px) brightness(0.88)",
+            maskImage: "linear-gradient(to right, black 0%, black 25%, transparent 50%)",
+            WebkitMaskImage: "linear-gradient(to right, black 0%, black 25%, transparent 50%)"
           }}
         />
-        <motion.div 
-          animate={{
-            x: [0, -30, 40, 0],
-            y: [0, 30, -40, 0],
-            scale: [1, 0.9, 1.1, 1],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+
+        {/*
+          LEFT BLEND: fade the blurred left zone into the page bg color.
+          Light mode → cream (#FAF9F5), dark mode → near black (#0A0A0B).
+        */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-bg-primary to-transparent"
           style={{
-            position: 'absolute',
-            bottom: '-15%',
-            right: '-10%',
-            width: '55%',
-            aspectRatio: '1',
-            borderRadius: '50%',
-            backgroundImage: 'radial-gradient(circle, rgba(46,109,180,0.08) 0%, transparent 70%)',
-            filter: 'blur(40px)',
+            maskImage: "linear-gradient(to right, black 0%, black 10%, transparent 45%)",
+            WebkitMaskImage: "linear-gradient(to right, black 0%, black 10%, transparent 45%)"
           }}
         />
+
+        {/* ── RIGHT SIDE EDGE BLENDING ── */}
+
+        {/* TOP edge: blur + fade into bg — stronger inward reach */}
+        <div
+          className="absolute inset-x-0 top-0 h-64"
+          style={{
+            backdropFilter: "blur(12px) brightness(0.72)",
+            WebkitBackdropFilter: "blur(12px) brightness(0.72)",
+            maskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
+          }}
+        />
+        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-bg-primary via-bg-primary/70 to-transparent" />
+
+        {/* RIGHT edge: blur + fade into bg */}
+        <div
+          className="absolute inset-y-0 right-0 w-72"
+          style={{
+            backdropFilter: "blur(10px) brightness(0.75)",
+            WebkitBackdropFilter: "blur(10px) brightness(0.75)",
+            maskImage: "linear-gradient(to left, black 0%, black 38%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to left, black 0%, black 38%, transparent 100%)"
+          }}
+        />
+        <div className="absolute inset-y-0 right-0 w-72 bg-gradient-to-l from-bg-primary via-bg-primary/70 to-transparent" />
+
+        {/* BOTTOM edge: blur + fade into bg — stronger inward reach */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-72"
+          style={{
+            backdropFilter: "blur(12px) brightness(0.72)",
+            WebkitBackdropFilter: "blur(12px) brightness(0.72)",
+            maskImage: "linear-gradient(to top, black 0%, black 40%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to top, black 0%, black 40%, transparent 100%)"
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-bg-primary via-bg-primary/70 to-transparent" />
       </div>
+      {/* ─────────────────────────────────────────────────────────────────────── */}
 
-      <div className="max-w-7xl mx-auto w-full px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
-        
+      <div className="max-w-7xl mx-auto w-full px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-20">
+
         {/* Left Column: Text */}
-        <div className="lg:col-span-7 flex flex-col justify-center order-2 lg:order-1 pt-12 lg:pt-0">
+        <div className="lg:col-span-8 flex flex-col justify-center pt-12 lg:pt-0">
           <div className="overflow-hidden mb-4">
-            <h2 className="text-xl md:text-2xl font-light text-text-secondary tracking-widest uppercase">
+            <h2 className="text-xl md:text-2xl font-light tracking-widest uppercase text-text-secondary">
               <SplitChars text="Hello, I'm" delay={1.5} />
             </h2>
           </div>
-          
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.1] font-semibold tracking-tight mb-8">
+
+          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.1] font-semibold tracking-tight mb-8 text-text-primary">
             <span className="block overflow-hidden px-2 pb-10 -mb-4 -mx-2">
               <SplitChars text="Thanh Hung" delay={1.8} />
             </span>
@@ -125,17 +131,18 @@ export function Hero({ onOpenResume }: HeroProps) {
               <SplitChars text="Phan" delay={2.1} />
             </span>
           </h1>
-          
+
           <FadeUp delay={2.4}>
-            <p className="text-lg md:text-xl text-text-secondary max-w-xl mb-12 leading-relaxed">
+            <p className="text-lg md:text-xl max-w-xl mb-12 leading-relaxed text-text-secondary">
               CS & Engineering Student @ Vietnamese-German Univ. <br />
               Building scalable system architectures & polished frontends.
             </p>
           </FadeUp>
 
           <FadeUp delay={2.6} className="flex flex-wrap items-center gap-6 mb-16">
-            <MagneticButton 
-              className="bg-text-primary text-bg-primary hover:bg-accent-gold" 
+            <MagneticButton
+              className="hover:bg-accent-gold"
+              style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' } as React.CSSProperties}
               strength={30}
               onClick={() => {
                 const el = document.getElementById('projects');
@@ -146,8 +153,9 @@ export function Hero({ onOpenResume }: HeroProps) {
                 View My Work <ArrowDown className="w-4 h-4" />
               </div>
             </MagneticButton>
-            <MagneticButton 
-              className="border border-border hover:bg-bg-tertiary" 
+            <MagneticButton
+              className="hover:bg-bg-tertiary"
+              style={{ border: '1px solid var(--border-hover)', color: 'var(--text-primary)' } as React.CSSProperties}
               strength={20}
               onClick={onOpenResume}
             >
@@ -157,84 +165,26 @@ export function Hero({ onOpenResume }: HeroProps) {
             </MagneticButton>
           </FadeUp>
 
-          {/* Badges */}
-          <FadeUp delay={2.8} className="flex flex-wrap gap-3">
+          {/* Badges Container — Fixed with max-w-xl and items-start to lock them left */}
+          <FadeUp delay={2.8} className="flex flex-wrap gap-3 max-w-xl items-start justify-start">
             {['Java', 'Spring Boot', 'C#', '.NET', 'Next.js', 'TypeScript', 'JavaScript', 'C++', 'Python', 'FastAPI'].map(tech => (
-              <span key={tech} className="px-4 py-1.5 rounded-full border border-border text-xs font-mono tracking-wide text-text-secondary">
+              <span
+                key={tech}
+                className="px-4 py-1.5 rounded-full text-xs font-mono tracking-wide backdrop-blur-sm border border-border-hover text-text-secondary bg-bg-glass whitespace-nowrap"
+              >
                 {tech}
               </span>
             ))}
           </FadeUp>
         </div>
 
-        {/* Right Column: Interactive 3D Parallax Image Card */}
-        <div className="lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2 relative">
-          {/* Decorative Squiggle behind/around profile photo */}
-          <DecorativeSquiggle
-            path={SQUIGGLE_PATHS.star}
-            width={160}
-            height={160}
-            className="absolute -top-12 -left-12 opacity-30 animate-pulse hidden sm:block"
-            duration={3}
-            delay={1.5}
-            scrollLinked={false}
-          />
-          <DecorativeSquiggle
-            path={SQUIGGLE_PATHS.hatch}
-            width={120}
-            height={120}
-            className="absolute -bottom-8 -right-8 opacity-40 hidden sm:block"
-            duration={2.5}
-            delay={2.0}
-            scrollLinked={false}
-          />
-          <FadeUp delay={1.5} className="w-full max-w-[320px] lg:max-w-[400px]">
-            <div 
-              style={{ perspective: "1000px" }}
-              className="w-full aspect-square"
-            >
-              <motion.div
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={handleMouseLeave}
-                animate={{
-                  rotateX: tilt.x,
-                  rotateY: tilt.y,
-                  scale: isHovered ? 1.03 : 1
-                }}
-                transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="relative w-full h-full rounded-full border border-border/20 overflow-hidden shadow-2xl bg-bg-secondary/40 backdrop-blur-sm cursor-pointer"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <motion.img 
-                  src="/pth-office-upscaled.jpg" 
-                  alt="Thanh Hung Phan" 
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                  style={{ 
-                    transform: "translateZ(20px)",
-                    scale: 1.05
-                  }}
-                  onError={(e) => {
-                    // Fallback while the user uploads their image
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop";
-                    e.currentTarget.onerror = null;
-                  }}
-                />
-                
-                {/* Thin overlay shimmer */}
-                <div 
-                  className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent transition-opacity duration-300"
-                  style={{ opacity: isHovered ? 1 : 0 }}
-                />
-              </motion.div>
-            </div>
-          </FadeUp>
-        </div>
+        {/* Right Column: Empty space so portrait background is visible */}
+        <div className="lg:col-span-4" />
       </div>
 
-      <div 
+      <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-text-tertiary"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-text-secondary z-20"
       >
         <ArrowDown className="w-6 h-6 opacity-50" />
       </div>
