@@ -82,11 +82,9 @@ html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
   transition:
-    background-color 0.35s ease,
-    border-color 0.35s ease,
-    color 0.3s ease,
-    box-shadow 0.35s ease,
-    opacity 0.3s ease !important;
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease !important;
 }
 
 /* Elements that must snap instantly even during theme transition */

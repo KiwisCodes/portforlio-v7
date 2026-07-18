@@ -14,7 +14,7 @@ export function SplitChars({ text, className, delay = 0 }: { text: string; class
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: delay },
+      transition: { staggerChildren: 0.022, delayChildren: delay },
     },
   };
 
@@ -24,13 +24,13 @@ export function SplitChars({ text, className, delay = 0 }: { text: string; class
       y: 0,
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 100,
+        damping: 14,
+        stiffness: 120,
       },
     },
     hidden: {
       opacity: 0,
-      y: 20,
+      y: 18,
     },
   };
 

@@ -119,27 +119,27 @@ export function Hero({ onOpenResume }: HeroProps) {
         <div className="lg:col-span-8 flex flex-col justify-center pt-12 lg:pt-0">
           <div className="overflow-hidden mb-4">
             <h2 className="text-xl md:text-2xl font-light tracking-widest uppercase text-text-secondary">
-              <SplitChars text="Hello, I'm" delay={1.5} />
+              <SplitChars text="Hello, I'm" delay={0.7} />
             </h2>
           </div>
 
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.1] font-semibold tracking-tight mb-8 text-text-primary">
             <span className="block overflow-hidden px-2 pb-10 -mb-4 -mx-2">
-              <SplitChars text="Thanh Hung" delay={1.8} />
+              <SplitChars text="Thanh Hung" delay={0.9} />
             </span>
             <span className="block overflow-hidden px-2 pb-10 -mb-4 -mx-2 mt-[-1.5rem]">
-              <SplitChars text="Phan" delay={2.1} />
+              <SplitChars text="Phan" delay={1.1} />
             </span>
           </h1>
 
-          <FadeUp delay={2.4}>
+          <FadeUp delay={1.3}>
             <p className="text-lg md:text-xl max-w-xl mb-12 leading-relaxed text-text-secondary">
               CS & Engineering Student @ Vietnamese-German Univ. <br />
               Building scalable system architectures & polished frontends.
             </p>
           </FadeUp>
 
-          <FadeUp delay={2.6} className="flex flex-wrap items-center gap-6 mb-16">
+          <FadeUp delay={1.5} className="flex flex-wrap items-center gap-6 mb-16">
             <MagneticButton
               className="hover:bg-accent-gold"
               style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' } as React.CSSProperties}
@@ -166,7 +166,7 @@ export function Hero({ onOpenResume }: HeroProps) {
           </FadeUp>
 
           {/* Badges Container — Fixed with max-w-xl and items-start to lock them left */}
-          <FadeUp delay={2.8} className="flex flex-wrap gap-3 max-w-xl items-start justify-start">
+          <FadeUp delay={1.7} className="flex flex-wrap gap-3 max-w-xl items-start justify-start">
             {['Java', 'Spring Boot', 'C#', '.NET', 'Next.js', 'TypeScript', 'JavaScript', 'C++', 'Python', 'FastAPI'].map(tech => (
               <span
                 key={tech}

@@ -52,29 +52,37 @@ export function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+    // Safe sync guard to align states
+    if (!root.classList.contains(theme)) {
+      root.classList.remove('light', 'dark');
+      root.classList.add(theme);
+    }
   }, [theme]);
 
-  const triggerTransition = () => {
-    const html = document.documentElement;
-    html.classList.add('theme-transitioning');
-    setTimeout(() => html.classList.remove('theme-transitioning'), 400);
-  };
-
   const setTheme = (newTheme: Theme) => {
-    triggerTransition();
+    const root = window.document.documentElement;
+    root.classList.add('theme-transitioning');
+    root.classList.remove('light', 'dark');
+    root.classList.add(newTheme);
+
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
+
+    setTimeout(() => root.classList.remove('theme-transitioning'), 250);
   };
 
   const toggleTheme = () => {
-    triggerTransition();
-    setThemeState(prev => {
-      const next = prev === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', next);
-      return next;
-    });
+    const root = window.document.documentElement;
+    root.classList.add('theme-transitioning');
+    
+    const next = theme === 'dark' ? 'light' : 'dark';
+    root.classList.remove('light', 'dark');
+    root.classList.add(next);
+
+    setThemeState(next);
+    localStorage.setItem('theme', next);
+
+    setTimeout(() => root.classList.remove('theme-transitioning'), 250);
   };
 
   return (
